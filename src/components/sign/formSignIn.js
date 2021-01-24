@@ -9,7 +9,10 @@ import { Button, Form } from 'react-bootstrap'
 const LoginForm = () => {
 
     const dispatch = useDispatch()
-    const [form, setForm] = useState({})
+    const [form, setForm] = useState({
+        email: "administrador@email.com",
+        password: "senha123"
+    })
 
     const handleChange = (event) => {
         setForm({
