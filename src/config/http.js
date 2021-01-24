@@ -3,7 +3,7 @@ import { getToken, removeToken } from "./auth";
 import history from './history'
 
 const http = axios.create({
-    baseURL: "http://localhost:4646/"
+    baseURL: "https://poke-team-api.herokuapp.com/"
 });
 
 // Padronizar requisições com json
