@@ -20,6 +20,7 @@ body {
     }
     h2, p{
         font-weight: 500;
+        color: black;
         opacity: 0.8;
     }
 }

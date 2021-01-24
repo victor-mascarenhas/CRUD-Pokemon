@@ -1,8 +1,8 @@
-import { Table, Button} from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllPokes, setPokemon, deletePokemon } from '../../store/pokemon/pokemon.action'
+import { getAllTypes, setType, deleteType } from '../../store/types/types.action'
 import Modal from '../modal'
 import Create from './create'
 import Swal from 'sweetalert2'
@@ -12,35 +12,35 @@ const List = () => {
 
 
     const dispatch = useDispatch()
+    const allTypes = useSelector((state) => state.types.all)
+    const isAdmin = useSelector((state) => state.auth.user.admin)
     const [show, setShow] = useState(false); 
     const [update, setUpdate] = useState(false)
-    const allPokes = useSelector((state) => state.pokemon.all)
-    const isAdmin = useSelector((state) => state.auth.user.admin)
 
     useEffect(() => {
-        dispatch(getAllPokes()) 
+        dispatch(getAllTypes())
         if (update) {
             setUpdate(false)
-          }       
-      }, [dispatch, update])
+          }    
+      }, [dispatch, update]) 
 
     const handleClose = () => {
-        dispatch(setPokemon({}))
+        dispatch(setType({}))
         setShow(false);
     }  
     const handleSubmit = () => {
-        dispatch(getAllPokes())
+        dispatch(getAllTypes())
         handleClose()
         setUpdate(true) 
     }
 
     const isEdit = (props) => {
-        dispatch(setPokemon(props))
+        dispatch(setType(props))
         setShow(true)
       }
 
 
-      const delpoke = (props) => {  
+      const delType = (props) => {  
         Swal.fire({
           title: 'Você tem certeza?',
           text: "Você não poderá desfazer esta ação!",
@@ -51,14 +51,12 @@ const List = () => {
           confirmButtonText: 'Excluir!'
         }).then((result) => {
           if (result.isConfirmed) {
-            dispatch(deletePokemon(props._id))
+            dispatch(deleteType(props._id))
             setTimeout(() => setUpdate(true), 500)
           }
           
         })
       }
- 
-
 
 
     return (
@@ -66,25 +64,22 @@ const List = () => {
             <Modal show={show} handleClose={handleClose} >
                 <Create close={handleSubmit} />
             </Modal>
+            <h1> Tipos Pokémon </h1>
             <NewTable striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Pokedex</th>
                         <th>Nome</th>
-                        <th>Tipo Principal</th>
-                        <th>Tipo Secundario</th>
-                        { isAdmin && <th>Ações</th> }
+                        <th>Cor</th>
+                        { isAdmin && <th>Ações</th> }                        
                     </tr>
                 </thead>
                 <tbody>
 
-                    {allPokes.map((pok, i) => (
+                    {allTypes.map((typ, i) => (
                     <tr key={i}>
-                        <td>{pok.pokedex}</td>
-                        <td>{pok.name}</td>
-                        <NewTd color={pok.type1.color}>{pok.type1.name}</NewTd>
-                        <NewTd color={pok.type2.color}>{pok.type2.name}</NewTd>
-                        { isAdmin && <td> <Button onClick={() => isEdit(pok)}> Editar </Button> <NewButton onClick={() => delpoke(pok)}> Excluir </NewButton> </td> }
+                        <td>{typ.name}</td>
+                        <td>{typ.color}</td>
+                        { isAdmin && <td> <Button onClick={() => isEdit(typ)}> Editar </Button> <NewButton onClick={() => delType(typ)}> Excluir </NewButton> </td> }
                     </tr>
                     ))}
 
@@ -102,9 +97,6 @@ height: 100%;
 `
 const NewButton = styled(Button)`
 background-color: red !important;
-`
-const NewTd = styled.td`
-color: ${props => props.color};
 `
 
 const NewTable = styled(Table)`

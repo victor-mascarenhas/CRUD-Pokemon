@@ -1,8 +1,17 @@
 import styled from 'styled-components'
 import logo from '../../assets/images/pokemon-logo-5.png'
+import { Link } from 'react-router-dom'
+import { isAuthenticated, removeToken } from '../../config/auth'
+import { useSelector } from 'react-redux'
 
 
 const BaseLayout = ({ children }) => {
+
+    const isAdmin = useSelector((state) => state.auth.user.admin)
+
+    const HandleLogout = () => {
+        removeToken();
+      }
 
     return (
         <Layout>
@@ -10,17 +19,44 @@ const BaseLayout = ({ children }) => {
                 <Box>
                     <Dashboard>
                         <User>
-                            <img src={logo} alt="" />
-                        </User>
+                            <Link to="/">
+                                <img src={logo} alt="" />
+                            </Link>
+                        </User>                        
                         <Options>
-                            <h2> Todos os Pokemons </h2>
-                        </Options>
-                        <Options>
+                        <Link to="/team/create">
                             <h2> Criar time </h2>
+                        </Link>
                         </Options>
                         <Options>
-                            <h2> Meus times </h2>
+                        <Link to="/">
+                            <h2> Todos os times </h2>
+                        </Link>
                         </Options>
+                        <Options>
+                            <Link to="/pokemons">
+                            <h2> Todos os Pokemons </h2>
+                            </Link>
+                        </Options>
+                        
+                        { isAdmin && <Options>
+                            <Link to="/admin">
+                            <h2> Admin </h2>
+                            </Link>
+                            </Options>}
+                        {
+                            isAuthenticated() ?
+                                <Options>
+                                    <Link  onClick={HandleLogout} to="/">
+                                        <h2> Sair </h2>
+                                    </Link>
+                                </Options>
+                                : <Options>
+                                    <Link to="/login">
+                                        <h2> Login </h2>
+                                    </Link>
+                                </Options>
+                        }
                     </Dashboard>
                     <Display>
                         <Content>
@@ -38,7 +74,7 @@ export default BaseLayout
 const Layout = styled.div`
 `
 const Main = styled.div`
-background-color: red;
+background-color: #a52320;
 min-height: 100vh;
 display: flex;
 align-items: center;
@@ -96,12 +132,17 @@ justify-content: center;
 position: absolute;
 width: 100%;
 height: 100%;
+background: linear-gradient( 
+  to right bottom,
+  rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+  border-radius: 2rem; 
+  overflow: auto;
 `
 
 /* const Content = styled.div`
 margin-bottom: 3rem;
 display: flex;
-background: linear-gradient( 
+background: linear-gradient(
   to left top,
   rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
   border-radius: 1rem;

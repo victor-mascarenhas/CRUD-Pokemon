@@ -2,10 +2,8 @@ import axios from "axios";
 import { getToken, removeToken } from "./auth";
 import history from './history'
 
-// Instância do cliente HTTP para as requisições
 const http = axios.create({
-    baseURL: "https://building-place-api.herokuapp.com/"
-  //baseURL: process.env.REACT_APP_API
+    baseURL: "http://localhost:4646/"
 });
 
 // Padronizar requisições com json

@@ -1,5 +1,5 @@
-import BaseLayout from '../components/layout'
-import List from '../components/pokemon/list'
+import BaseLayout from '../../components/layout'
+import List from '../../components/pokemon/list'
 
 
 const Pokemons = () => {
